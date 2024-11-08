@@ -20,21 +20,33 @@ app.use(
 
 // Admin credentials
 const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'password123';
+const ADMIN_PASSWORD = 'joeygwapohehe';
 
 // Read and write usernames to data.json
 const readData = () => JSON.parse(fs.readFileSync('data.json', 'utf8') || '[]');
 const writeData = (data) => fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
-
-
+// Display the home page
 app.get('/', (req, res) => {
-    // If the user has already submitted a username, show it along with the result
+    const data = readData();
+
+    // Check if the username in session still exists in the backend data
     if (req.session.username && req.session.result) {
-        res.render('index', { message: `Username: ${req.session.username} - Result: ${req.session.result}` });
-    } else {
-        res.render('index', { message: null });
+        const usernameExists = data.some((entry) => entry.username === req.session.username);
+        
+        if (usernameExists) {
+            // If username exists, display the stored username and result
+            return res.render('index', { message: `Username: ${req.session.username} - Result: ${req.session.result}` });
+        } else {
+            // If username no longer exists, clear session data
+            req.session.username = null;
+            req.session.result = null;
+        }
     }
+
+    // Render the page with the form since no username is in session or it no longer exists in data.json
+    res.render('index', { message: null });
 });
+
 // Handle username submission and box opening
 app.post('/open-box', (req, res) => {
     if (req.session.username && req.session.result) {
@@ -51,7 +63,7 @@ app.post('/open-box', (req, res) => {
         res.render('index', { message: `The username "${username}" is already taken. Please choose a different one.` });
     } else {
         // Generate a random outcome
-        const outcome = Math.random() < 0.5 ? 'Bomb' : 'You Win!';
+        const outcome = Math.random() < 0.5 ? 'Bomb' : 'Move Up!';
 
         // Add the new entry to the data
         data.push({ username, outcome });
