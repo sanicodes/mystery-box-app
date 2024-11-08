@@ -1,1 +1,6 @@
-[]
+[
+  {
+    "username": "admin",
+    "outcome": "Bomb!"
+  }
+]

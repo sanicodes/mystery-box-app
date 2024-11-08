@@ -1,29 +1,169 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+1VpvA8V3mDJbB2V+1mZ7FCljgKDLb2KpV+mUytBy91gEV+uWqlXDj4dD3M3U5r+vKMt1fE5j4u1vYSf1+7eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Mystery Box</title>
+    <style>
+        /* Basic styling */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #0f0f0f;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        /* Background word animation styling */
+        .floating-words {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-word {
+            position: absolute;
+            color: rgba(0, 255, 0, 0.5);
+            font-size: 18px;
+            animation: float 10s linear infinite;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main content styling */
+        .mystery-box-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .mystery-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .mystery-form .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mystery-button {
+            background-color: #0a0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .mystery-button:hover {
+            background-color: #0d0;
+        }
+
+        /* Message styling */
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .message.error {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ff4f4f;
+        }
+
+        .message.success {
+            background-color: rgba(0, 255, 0, 0.2);
+            color: #4fff4f;
+        }
+    </style>
 </head>
 <body>
-    <h1>Open Your Mystery Box</h1>
+    <div class="floating-words" id="floatingWords"></div>
+    <div class="mystery-box-container">
+        <h1 class="mystery-title"><i class="fas fa-box-open"></i> Open Your Mystery Box</h1>
 
-    <!-- Display message from the server (either the result or an error message) -->
-    <% if (message) { %>
-        <p><%= message %></p>
-    <% } %>
+        <!-- Display message from the server (either the result or an error message) -->
+        <% if (message) { 
+            const isError = message.includes('already taken');
+        %>
+            <p class="message <%= isError ? 'error' : 'success' %>">
+                <% if (isError) { %>
+                    <i class="fas fa-exclamation-circle"></i> 
+                <% } else { %>
+                    <i class="fas fa-check-circle"></i> 
+                <% } %>
+                <%= message %>
+            </p>
+        <% } %>
 
-    <!-- Form to submit username (only shown if no username is set in the session) -->
-    <% if (!message) { %>
-        <div id="formContainer">
-            <form id="usernameForm" action="/open-box" method="POST">
-                <input type="text" id="usernameInput" name="username" placeholder="Enter your username" required>
-                <button type="submit">Open Box</button>
-            </form>
-        </div>
-    <% } %>
+        <!-- Form to submit username (only shown if no username is set in the session) -->
+        <% if (!message) { %>
+            <div id="formContainer" class="mystery-form">
+                <form id="usernameForm" action="/open-box" method="POST">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="usernameInput" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <button type="submit" class="mystery-button"><i class="fas fa-gift"></i> Reveal My Box</button>
+                </form>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        // JavaScript to create and animate floating words
+        const floatingWordsContainer = document.getElementById('floatingWords');
+        const words = ['arjay','lau','lloyd', 'almahsol', 'fayne', 'therese', 'joshua', 'james', 'ellen', 'deborah', 'angelica', 'romiel', 'dave', 'viola', 'dan', 'jesse', 'stephen', 'boarders', 'daddy g', 'bposeatsuser', 'ochinchin', 'moalboal'];
+
+        function createFloatingWord() {
+            const word = document.createElement('div');
+            word.classList.add('floating-word');
+            word.innerText = words[Math.floor(Math.random() * words.length)];
+            word.style.left = Math.random() * 100 + 'vw';
+            word.style.animationDuration = Math.random() * 10 + 5 + 's';
+            word.style.fontSize = Math.random() * 15 + 15 + 'px';
+            floatingWordsContainer.appendChild(word);
+
+            // Remove word after animation completes
+            word.addEventListener('animationend', () => {
+                word.remove();
+            });
+        }
+
+        setInterval(createFloatingWord, 500); // Add a new floating word every 500 ms
+    </script>
 </body>
 </html>
 
