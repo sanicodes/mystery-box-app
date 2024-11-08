@@ -23,7 +23,7 @@ const ADMIN_USERNAME = 'admin';
 const ADMIN_PASSWORD = 'joeyhehe';
 
 // Read and write usernames to data.json
-const readData = () => JSON.parse(fs.readFileSync('../data.json', 'utf8') || '[]');
+const readData = () => JSON.parse(fs.readFileSync('data.json', 'utf8') || '[]');
 const writeData = (data) => fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
 // Display the home page
 app.get('/', (req, res) => {
