@@ -23,7 +23,7 @@ const ADMIN_USERNAME = 'admin';
 const ADMIN_PASSWORD = 'joeyhehe';
 
 const path = require('path');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs'); // or your template engine of choice
 // Read and write usernames to data.json
 const readData = () => JSON.parse(fs.readFileSync(path.join(__dirname,'data.json'), 'utf8') || '[]');
