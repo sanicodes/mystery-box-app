@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Mystery Box</title>
+</head>
+<body>
+    <h1>Open Your Mystery Box</h1>
+
+    <!-- Display message from the server (either the result or an error message) -->
+    <% if (message) { %>
+        <p><%= message %></p>
+    <% } %>
+
+    <!-- Form to submit username (only shown if no username is set in the session) -->
+    <% if (!message) { %>
+        <div id="formContainer">
+            <form id="usernameForm" action="/open-box" method="POST">
+                <input type="text" id="usernameInput" name="username" placeholder="Enter your username" required>
+                <button type="submit">Open Box</button>
+            </form>
+        </div>
+    <% } %>
+</body>
+</html>
+

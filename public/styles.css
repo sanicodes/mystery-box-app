@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+form, table {
+    margin: 20px auto;
+}
+input[type="text"] {
+    padding: 10px;
+    margin-right: 10px;
+}
+button {
+    padding: 10px;
+}
+table {
+    width: 50%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
